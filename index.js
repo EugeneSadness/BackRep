@@ -2,54 +2,59 @@ const express = require('express');
 const cors = require('cors');
 const httpProxy = require('http-proxy');
 const proxy = httpProxy.createProxyServer();
+const { Sequelize, DataTypes } = require('sequelize');
+const sequelize = new Sequelize('test', 'eugene', 'king5681', {
+  host: 'localhost',
+  dialect: 'postgres'
+})
 
 const app = express();
 app.use(cors());
 
-app.get("",(req,res)=>{
+var corsOptions = {
+  origin: "http://localhost:3001"
+};
+
+app.use(cors(corsOptions));
+
+
+// parse requests of content-type - application/json
+app.use(express.json());
+
+// parse requests of content-type - application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: true }));
+
+const db = require("./models");
+const Role = db.role;
+
+db.sequelize.sync({force: true}).then(() => {
+  console.log('Drop and Resync Db');
+  initial();
+});
+
+function initial() {
+  Role.create({
+    id: 1,
+    name: "user"
+  });
+ 
+  Role.create({
+    id: 2,
+    name: "moderator"
+  });
+ 
+  Role.create({
+    id: 3,
+    name: "admin"
+  });
+}
+
+require('./routes/auth.routes')(app);
+require('./routes/user.routes')(app);
+
+
+app.get("/",(req,res)=>{
   res.send("Hello");
 });
 
 app.listen(3000, () => console.log('Example app is listening on port 3000.'));
-
-
-// const { Sequelize, DataTypes, QueryTypes } = require('sequelize');
-
-// const sequelize = new Sequelize('test', 'eugene', 'king5681', {
-//     host: 'localhost',
-//     dialect: 'postgres'
-//   })
-// try {
-//     sequelize.authenticate()
-//     console.log('Соединение с БД было успешно установлено')
-//   } catch (e) {
-//     console.log('Невозможно выполнить подключение к БД: ', e)
-//   }
-
-// const Users = sequelize.define(
-//   'Users',
-//   {
-//     firstName: DataTypes.STRING,
-//     age: DataTypes.INTEGER,
-//     id: DataTypes.INTEGER,
-//   },
-//   {
-//     timestamps: false,
-//   }
-// )
-
-// console.log(Users == sequelize.models.Users)
-
-// await Users.sync({alter: true, match: /users$/ })
-// console.log('Таблица приведена к соответствующей модели')
-
-//const results = new String;
-
-// sequelize.query("SELECT users.fisrtname FROM users WHERE users.fisrtname LIKE 'E%'", { type:
-//   QueryTypes.SELECT })
-//   .then(results => {
-//     console.log(results);
-//   })
-//   .catch(error => {
-//     console.error('Ошибка выполнения запроса');
-//   });
