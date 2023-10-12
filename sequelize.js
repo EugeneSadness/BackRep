@@ -18,19 +18,19 @@ const User = sequelize.define(
 )
 
 // `sequelize.define` возвращает модель
-console.log(User === sequelize.models.Mate) // true
+// console.log(User === sequelize.models.Mate) // true
 
-const newRec = User.build({
-  Id: '1283121',
-  name: 'Eugene',
-  email: 'eugene@gmail.com',
-  password: 'pswd'
-})
+// const newRec = User.build({
+//   Id: '1283121',
+//   name: 'Eugene',
+//   email: 'eugene@gmail.com',
+//   password: 'pswd'
+// })
 
-newRec.save()
-  .then(result => {
-    console.log('Got it!');
-  })
-  .catch(error => {
-    console.error('fucked up.. ', error);
-  });
+// newRec.save()
+//   .then(result => {
+//     console.log('Got it!');
+//   })
+//   .catch(error => {
+//     console.error('fucked up.. ', error);
+//   });
