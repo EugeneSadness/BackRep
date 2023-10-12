@@ -3,6 +3,16 @@ const cors = require('cors');
 const httpProxy = require('http-proxy');
 const proxy = httpProxy.createProxyServer();
 
+const app = express();
+app.use(cors());
+
+app.get("",(req,res)=>{
+  res.send("Hello");
+});
+
+app.listen(3000, () => console.log('Example app is listening on port 3000.'));
+
+
 // const { Sequelize, DataTypes, QueryTypes } = require('sequelize');
 
 // const sequelize = new Sequelize('test', 'eugene', 'king5681', {
@@ -43,13 +53,3 @@ const proxy = httpProxy.createProxyServer();
 //   .catch(error => {
 //     console.error('Ошибка выполнения запроса');
 //   });
-
-
-const app = express();
-app.use(cors());
-
-app.get("/getData",(req,res)=>{
-  res.send("Hello");
-});
-
-app.listen(3000, () => console.log('Example app is listening on port 3000.'));
